@@ -11,8 +11,13 @@ from django.db.models.signals import post_save
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, primary_key=True)
+    userprofileImage = models.ImageField()
+    userprofileDescription = models.TextField(max_length=100)
     userprofileCreatedAt = models.DateTimeField(auto_now_add=True)
     userprofileUpdatedAt = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return 'UserProfile : %s' % (self.user.username)
 
 @receiver(post_save, sender=User)
 def create_userprofile(sender, instance, created, **kwargs):
@@ -56,13 +61,22 @@ def create_postprofile1(sender, instance, created, **kwargs):
         PostProfile.objects.create(comment=instance)
 
 class Allow(models.Model):
-    
+    allowingUserProfile = models.ForeignKey(UserProfile)
+    allowedUserProfile = models.ForeignKey(UserProfile)
+    allowCreatedAt = models.DateTimeField(auto_now_add=True)
+    allowUpdatedAt = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return 'allowing : %s, allowed : %s, UpdatedAt : %s, Created At : %s' % (self.allowingUserProfile, self.allowedUserProfile, self.allowUpdatedAt, self.allowCreatedAt)
+
+    class Meta:
+        unique_together = (('allowingUserProfile', 'allowedUserProfile'),)
 
 class Wdt(models.Model):
     wdtUser = models.ForeignKey(UserProfile)
     wdtContents = models.ForeignKey(PostProfile)
     wdtCreatedAt = models.DateTimeField(auto_now_add=True)
-    wdtUpdatedAt = models.DateField(auto_now=True)
+    wdtUpdatedAt = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return '%s has Wdted %s at %s_created : %s' % (self.wdtUser, self.wdtContents, self.wdtUpdatedAt, self.wdtCreatedAt)
