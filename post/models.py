@@ -1,7 +1,5 @@
 from django.db import models
-from relationship.models import ContentRelationship
 
-# Create your models here.
 class Post(models.Model):
 
     postText = models.TextField(max_length=2000)
