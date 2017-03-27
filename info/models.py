@@ -9,7 +9,7 @@ from django.dispatch import receiver
 from django.db.models.signals import post_save
 # Create your models here.
 
-class UserProfile(models.Model):
+class Userprofile(models.Model):
     user = models.OneToOneField(User, primary_key=True)
     userprofileImage = models.ImageField()
     userprofileDescription = models.TextField(max_length=100)
@@ -20,11 +20,14 @@ class UserProfile(models.Model):
         return 'UserProfile : %s' % (self.user.username)
 
 @receiver(post_save, sender=User)
-def create_userprofile(sender, instance, created, **kwargs):
+def createUserprofile(sender, instance, created, **kwargs):
     if created:
-        UserProfile.objects.create(user=instance)
+        Userprofile.objects.create(user=instance)
+@receiver(post_save, sender=User)
+def saveUserprofile(sender, instance, **kwargs):
+    instance.userprofile.save()
 
-class PostProfile(models.Model):
+class Contentsprofile(models.Model):
     title = models.OneToOneField(Title, null=True, blank=True)
     basic = models.OneToOneField(Basic, null=True, blank=True)
     stash = models.OneToOneField(Stash, null=True, blank=True)
@@ -36,33 +39,48 @@ class PostProfile(models.Model):
     #Do something to connect Post1 or Post2
 
 @receiver(post_save, sender=Title)
-def create_postprofile1(sender, instance, created, **kwargs):
+def createContentprofileForTitle(sender, instance, created, **kwargs):
     if created:
-        PostProfile.objects.create(title=instance)
+        Contentsprofile.objects.create(title=instance)
+@receiver(post_save, sender=Title)
+def saveContentsprofileForTitle(sender, instance, **kwargs):
+    instance.contentsprofile.save()
 
 @receiver(post_save, sender=Basic)
-def create_postprofile1(sender, instance, created, **kwargs):
+def createContentsprofileForBasic(sender, instance, created, **kwargs):
     if created:
-        PostProfile.objects.create(basic=instance)
+        Contentsprofile.objects.create(basic=instance)
+@receiver(post_save, sender=Basic)
+def saveContentsprofileForBasic(sender, instance, **kwargs):
+    instance.contentsprofile.save()
 
 @receiver(post_save, sender=Stash)
-def create_postprofile1(sender, instance, created, **kwargs):
+def createContentsprofileForStash(sender, instance, created, **kwargs):
     if created:
-        PostProfile.objects.create(stash=instance)
+        Contentsprofile.objects.create(stash=instance)
+@receiver(post_save, sender=Stash)
+def saveContentsprofileForStash(sender, instance, **kwargs):
+    instance.contentsprofile.save()
 
 @receiver(post_save, sender=Post)
-def create_postprofile2(sender, instance, created, **kwargs):
+def createContentsprofileForPost(sender, instance, created, **kwargs):
     if created:
-        PostProfile.objects.create(post=instance)
+        Contentsprofile.objects.create(post=instance)
+@receiver(post_save, sender=Post)
+def saveContentsprofileForPost(sender, instance, **kwargs):
+    instance.contentsprofile.save()
 
 @receiver(post_save, sender=Comment)
-def create_postprofile1(sender, instance, created, **kwargs):
+def createContentsprofileForComment(sender, instance, created, **kwargs):
     if created:
-        PostProfile.objects.create(comment=instance)
+        Contentsprofile.objects.create(comment=instance)
+@receiver(post_save, sender=Comment)
+def saveContentsprofileForComment(sender, instance, **kwargs):
+    instance.contentsprofile.save()
 
 class Allow(models.Model):
-    allowingUserProfile = models.ForeignKey(UserProfile)
-    allowedUserProfile = models.ForeignKey(UserProfile)
+    allowingUserProfile = models.ForeignKey(Userprofile, related_name='allowingUserProfile')
+    allowedUserProfile = models.ForeignKey(Userprofile, related_name='allowedUserProfile')
     allowCreatedAt = models.DateTimeField(auto_now_add=True)
     allowUpdatedAt = models.DateTimeField(auto_now=True)
 
@@ -73,8 +91,8 @@ class Allow(models.Model):
         unique_together = (('allowingUserProfile', 'allowedUserProfile'),)
 
 class Wdt(models.Model):
-    wdtUser = models.ForeignKey(UserProfile)
-    wdtContents = models.ForeignKey(PostProfile)
+    wdtUser = models.ForeignKey(Userprofile)
+    wdtContents = models.ForeignKey(Contentsprofile)
     wdtCreatedAt = models.DateTimeField(auto_now_add=True)
     wdtUpdatedAt = models.DateTimeField(auto_now=True)
 
