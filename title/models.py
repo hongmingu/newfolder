@@ -2,9 +2,11 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
+
 class Title(models.Model):
+    titleUser = models.ForeignKey(User)
     titleText = models.TextField(max_length=160, unique=True)
-    titleRelationship = models.OneToOneField('relationship.ContentRelationship', on_delete=models.CASCADE)
+    titleCreatedAt = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.titleText

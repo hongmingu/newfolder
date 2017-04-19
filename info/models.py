@@ -11,13 +11,13 @@ from django.db.models.signals import post_save
 
 class Userprofile(models.Model):
     user = models.OneToOneField(User, primary_key=True)
-    userprofileImage = models.ImageField()
+    userprofileImage = models.ImageField(blank=True)
     userprofileDescription = models.TextField(max_length=100)
     userprofileCreatedAt = models.DateTimeField(auto_now_add=True)
     userprofileUpdatedAt = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return 'UserProfile : %s' % (self.user.username)
+        return 'UserProfile : %s, Updated at : %s' % (self.user.username, self.userprofileUpdatedAt)
 
 @receiver(post_save, sender=User)
 def createUserprofile(sender, instance, created, **kwargs):

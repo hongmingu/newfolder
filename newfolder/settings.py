@@ -37,6 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
     'title',
     'basic',
     'stash',
@@ -44,6 +47,8 @@ INSTALLED_APPS = [
     'comment',
     'info',
 ]
+
+SITE_ID = 1
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -125,3 +130,19 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 STATIC_URL = '/static/'
+# django - allauth settings
+
+AUTHENTICATION_BACKENDS = (
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
+
+    # `allauth` specific authentication methods, such as login by e-mail
+    'allauth.account.auth_backends.AuthenticationBackend',
+)
+
+
+ACCOUNT_AUTHENTICATED_LOGIN_REDIRECTS = True
+# ACCOUNT_AUTHENTICATION_METHOD = 'username' | 'email' | 'username_email'
+ACCOUNT_CONFIRM_EMAIL_ON_GET = False
+
+LOGIN_REDIRECT_URL = "/"

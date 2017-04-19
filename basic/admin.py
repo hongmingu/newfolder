@@ -1,5 +1,4 @@
 from django.contrib import admin
-from title.models import Title
+from .models import Basic
 # Register your models here.
-
-admin.site.register(Title)
+admin.site.register(Basic)

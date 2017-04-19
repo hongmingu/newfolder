@@ -13,9 +13,23 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.conf.urls import url
+from django.conf.urls import url, include
 from django.contrib import admin
-
+from django.views.generic import TemplateView
+from . import views
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'^accounts/', include('allauth.urls')),
+    url(r'^title/', include('post.urls', namespace='title')),
+    url(r'^basic/', include('basic.urls', namespace='basic')),
+    url(r'^stash/', include('stash.urls', namespace='stash')),
+    url(r'^post/', include('post.urls', namespace='post')),
+    url(r'^comment/', include('comment.urls', namespace='comment')),
+    url(r'^info/', include('info.urls', namespace='info')),
+    # url(r'^$', TemplateView.as_view(template_name='base.html'))
+    url(r'^$', views.AjaxListView.as_view(), name='post_list'),
+    url(r'^Main/$', views.searched_list, name='post_list_main'),
+    url(r'^articles/search/$', views.search_titles, name='search_titles'),
+    url(r'^articles/$', TemplateView.as_view(template_name='artilces.html'))
+
 ]

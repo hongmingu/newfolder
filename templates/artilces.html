@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Articles</title>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+
+</head>
+<body>
+
+<h3>Search</h3>
+{% csrf_token %}
+<input type="text" id="search" name="search" />
+
+<ul id="search-results">
+
+</ul>
+<script>
+
+
+    jQuery(document).ready(function ($) {
+        $('#search').keyup(function () {
+            $.ajax({
+                type: "POST",
+                url : "search/",
+                data : {
+                    'search_text' : $('#search').val(),
+                    'csrfmiddlewaretoken' : $('input[name=csrfmiddlewaretoken]').val()
+                },
+                success : searchSuccess,
+                dataType : 'html'
+            });
+
+        });
+
+    });
+
+    function searchSuccess(data, textStatus, jqXHR) {
+        $('#search-results').html(data);
+    }
+
+</script>
+</body>
+</html>

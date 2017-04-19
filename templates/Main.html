@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tit111le</title>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+
+</head>
+<body>
+<div>
+    <form id="searchForm" method="get" action="">
+    <input type="text" name="q" placeholder="Search posts" />
+    <input type="submit" value="Search"/>
+    </form>
+</div>
+
+<div>
+    <form name="demo-form" method="POST" action="">{% csrf_token %}
+        <button class="btn btn-success" name="start_manifest">Start Manifest</button>
+        <button class="btn btn-success" name="close_manifest">Close Manifest</button>
+    </form>
+</div>
+
+<div>
+    <form>
+        <button id="hello" >button</button>
+    </form>
+</div>
+
+
+<div>
+    {% if title %}
+        {% for ss in title %}
+            <li>{{ ss.titleText }}</li>
+        {% endfor %}
+    {% endif %}
+</div>
+
+<div id="shuffle">
+    <div>1</div>
+    <div>2</div>
+    <div>3</div>
+    <div>4</div>
+    <div>5</div>
+    <div>6</div>
+    <div>7</div>
+    <div>8</div>
+    <div>9</div>
+</div>
+
+<script>
+    jQuery(document).ready(function($){
+    $('[name="form_internal_manifest"]').on('submit', function(event){
+        event.preventDefault();
+        $.ajax({
+            url : "",
+            type : "POST",
+            data: {action: 'start_manifest'},
+          })
+        })
+    })
+
+    jQuery(document).ready(function($){
+        $('[name="form_internal_manifest"]').on('submit', function(event){
+            event.preventDefault();
+            $.ajax({
+                url : "",
+                type : "POST",
+                data: {action: 'close_manifest'},
+            })
+        })
+    })
+
+    $(function () {
+        var parent = $("#shuffle");
+        var divs = parent.children();
+        while (divs.length) {
+            parent.append(divs.splice(Math.floor(Math.random() * divs.length), 1)[0]);
+        }
+    });
+
+        $(function () {
+        $('#page_2').click(function () {
+            $.get('', {page:1}, function (data) {
+                console.log('----response-----');
+                console.log(data);
+                var testnumber = $('#test');
+
+                testnumber.append(data);
+            });
+            return false;
+        });
+    });
+</script>
+
+
+</body>
+</html>
