@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from title.models import Title
-from basic.models import Basic
+from base.models import Base
 from stash.models import Stash
 from post.models import Post
 from comment.models import Comment
@@ -29,7 +29,7 @@ def saveUserprofile(sender, instance, **kwargs):
 
 class Contentsprofile(models.Model):
     title = models.OneToOneField(Title, null=True, blank=True)
-    basic = models.OneToOneField(Basic, null=True, blank=True)
+    basic = models.OneToOneField(Base, null=True, blank=True)
     stash = models.OneToOneField(Stash, null=True, blank=True)
     post = models.OneToOneField(Post, null=True, blank=True)
     comment = models.OneToOneField(Comment, null=True, blank=True)
@@ -46,11 +46,11 @@ def createContentprofileForTitle(sender, instance, created, **kwargs):
 def saveContentsprofileForTitle(sender, instance, **kwargs):
     instance.contentsprofile.save()
 
-@receiver(post_save, sender=Basic)
+@receiver(post_save, sender=Base)
 def createContentsprofileForBasic(sender, instance, created, **kwargs):
     if created:
         Contentsprofile.objects.create(basic=instance)
-@receiver(post_save, sender=Basic)
+@receiver(post_save, sender=Base)
 def saveContentsprofileForBasic(sender, instance, **kwargs):
     instance.contentsprofile.save()
 
@@ -78,26 +78,26 @@ def createContentsprofileForComment(sender, instance, created, **kwargs):
 def saveContentsprofileForComment(sender, instance, **kwargs):
     instance.contentsprofile.save()
 
-class Allow(models.Model):
-    allowingUserProfile = models.ForeignKey(Userprofile, related_name='allowingUserProfile')
-    allowedUserProfile = models.ForeignKey(Userprofile, related_name='allowedUserProfile')
-    allowCreatedAt = models.DateTimeField(auto_now_add=True)
-    allowUpdatedAt = models.DateTimeField(auto_now=True)
+class Bridge(models.Model):
+    bridgingUserProfile = models.ForeignKey(Userprofile, related_name='bridgingUserProfile')
+    bridgedUserProfile = models.ForeignKey(Userprofile, related_name='bridgedUserProfile')
+    bridgeCreatedAt = models.DateTimeField(auto_now_add=True)
+    bridgeUpdatedAt = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return 'allowing : %s, allowed : %s, UpdatedAt : %s, Created At : %s' % (self.allowingUserProfile, self.allowedUserProfile, self.allowUpdatedAt, self.allowCreatedAt)
+        return 'bridging : %s, bridged : %s, UpdatedAt : %s, Created At : %s' % (self.bridgingUserProfile, self.bridgedUserProfile, self.bridgeCreatedAt, self.bridgeUpdatedAt)
 
     class Meta:
-        unique_together = (('allowingUserProfile', 'allowedUserProfile'),)
+        unique_together = (('bridgingUserProfile', 'bridgedUserProfile'),)
 
-class Wdt(models.Model):
-    wdtUser = models.ForeignKey(Userprofile)
-    wdtContents = models.ForeignKey(Contentsprofile)
-    wdtCreatedAt = models.DateTimeField(auto_now_add=True)
-    wdtUpdatedAt = models.DateTimeField(auto_now=True)
+class Flow(models.Model):
+    flowingUserProfile = models.ForeignKey(Userprofile)
+    flowedContentsProfile = models.ForeignKey(Contentsprofile)
+    flowCreatedAt = models.DateTimeField(auto_now_add=True)
+    flowUpdatedAt = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return '%s has Wdted %s at %s_created : %s' % (self.wdtUser, self.wdtContents, self.wdtUpdatedAt, self.wdtCreatedAt)
+        return 'flowingUser : %s, flowedContent : %s, UpdatedAt : %s, CreatedAt : %s' % (self.flowingUserProfile, self.flowedContentProfile, self.flowCreatedAt, self.flowUpdatedAt)
 
     class Meta:
-        unique_together = (('wdtUser', 'wdtContents'),)
+        unique_together = (('flowingUserProfile', 'flowedContentsProfile'),)

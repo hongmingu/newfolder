@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'title',
-    'basic',
+    'base',
     'stash',
     'post',
     'comment',

@@ -21,7 +21,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^accounts/', include('allauth.urls')),
     url(r'^title/', include('post.urls', namespace='title')),
-    url(r'^basic/', include('basic.urls', namespace='basic')),
+    url(r'^base/', include('base.urls', namespace='base')),
     url(r'^stash/', include('stash.urls', namespace='stash')),
     url(r'^post/', include('post.urls', namespace='post')),
     url(r'^comment/', include('comment.urls', namespace='comment')),

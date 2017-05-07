@@ -1,4 +1,4 @@
 from django.contrib import admin
-from .models import Basic
+from .models import Base
 # Register your models here.
-admin.site.register(Basic)
+admin.site.register(Base)

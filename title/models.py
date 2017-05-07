@@ -5,8 +5,11 @@ from django.contrib.auth.models import User
 
 class Title(models.Model):
     titleUser = models.ForeignKey(User)
+
     titleText = models.TextField(max_length=160, unique=True)
+
     titleCreatedAt = models.DateTimeField(auto_now_add=True)
+    titleUpdatedAt = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.titleText
